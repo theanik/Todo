@@ -2,7 +2,9 @@
     "autoload": {
         "psr-4": {
             "App\\" : "src/",
-            "App\\Config\\" : "config/"
+            "App\\Config\\" : "config/",
+            "App\\Model\\" : "model/",
+            "App\\Contoller\\" : "controller/"
         }
     }
 }

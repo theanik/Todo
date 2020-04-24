@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Config\\Config' => $baseDir . '/config/Config.php',
+    'App\\Model\\Database\\Database' => $baseDir . '/src/model/Database.php',
 );

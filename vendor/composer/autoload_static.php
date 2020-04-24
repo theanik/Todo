@@ -9,12 +9,22 @@ class ComposerStaticInit4ce59a9e389a070bd7e17bae885e567b
     public static $prefixLengthsPsr4 = array (
         'A' => 
         array (
+            'App\\Model\\' => 10,
+            'App\\Contoller\\' => 14,
             'App\\Config\\' => 11,
             'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
+        'App\\Model\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/model',
+        ),
+        'App\\Contoller\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/controller',
+        ),
         'App\\Config\\' => 
         array (
             0 => __DIR__ . '/../..' . '/config',
@@ -27,6 +37,7 @@ class ComposerStaticInit4ce59a9e389a070bd7e17bae885e567b
 
     public static $classMap = array (
         'App\\Config\\Config' => __DIR__ . '/../..' . '/config/Config.php',
+        'App\\Model\\Database\\Database' => __DIR__ . '/../..' . '/src/model/Database.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
