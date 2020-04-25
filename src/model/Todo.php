@@ -1,5 +1,6 @@
 <?php
 
+namespace App\Model;
 require_once realpath("vendor/autoload.php");
 use App\Model\Database\Database;
 
@@ -12,5 +13,5 @@ class Todo extends Database{
    
 }
 
-print_r(Todo::getById('14'));
+// print_r(Todo::getAll());
 

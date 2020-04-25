@@ -63,11 +63,17 @@ class Database{
      * return all from database
      */
 
+     static function table()
+     {
+            $model_path = self::getTblName();
+            $model_path = explode("\\",$model_path);
+            return strtolower($model_path[2]);
+     }
+
      public static function getAll()
      {
         try{
-            
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "SELECT * FROM {$table}";
             $result = self::$conn->query($sql);
             // return $result;
@@ -91,7 +97,7 @@ class Database{
      {
         try{
             
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "SELECT * FROM {$table} WHERE {$condition}";
             $result = self::$conn->query($sql);
             // return $result;
@@ -114,7 +120,7 @@ class Database{
      {
         try{
             
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "SELECT * FROM {$table} WHERE id = {$id}";
             $result = self::$conn->query($sql);
             if($result->num_rows > 0){
@@ -134,11 +140,13 @@ class Database{
       public static function add($condition)
       {
         try{
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "INSERT INTO {$table} SET {$condition}";
-            $result = self::$conn->query($sql);
-            if($result->affected_rows > 0){
+            $result = self::$conn->query($sql) or die (self::$conn->error . __LINE__);
+            if(self::$conn->affected_rows > 0){
                 return $result;
+            }else{
+                return false;
             }
         }catch(Exception $e){
             return $e->getMessage() ." : ".$e->getCode();
@@ -149,11 +157,13 @@ class Database{
      {
         try{
             
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "DELETE FROM {$table} WHERE {$condition}";
-            $result = self::$conn->query($sql);
-            if($result->affected_rows > 0){
+            $result = self::$conn->query($sql) or die (self::$conn->error . __LINE__);
+            if(self::$conn->affected_rows > 0){
                 return $result;
+            }else{
+                return false;
             }
 
 
@@ -166,11 +176,13 @@ class Database{
      {
         try{
             
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "DELETE FROM {$table} WHERE id = {$id}";
-            $result = self::$conn->query($sql);
-            if($result->affected_rows > 0){
+            $result = self::$conn->query($sql) or die (self::$conn->error . __LINE__);
+            if(self::$conn->affected_rows > 0){
                 return $result;
+            }else{
+                return false;
             }
 
 
@@ -184,11 +196,32 @@ class Database{
      {
         try{
             
-            $table = strtolower(self::getTblName());
+            $table = self::table();
             $sql = "UPDATE {$table} SET {$values} WHERE {$condition}";
-            $result = self::$conn->query($sql);
-            if($result->affected_rows > 0){
+            $result = self::$conn->query($sql) or die (self::$conn->error . __LINE__);
+            if(self::$conn->affected_rows > 0){
                 return $result;
+            }else{
+                return false;
+            }
+
+
+        }catch(Exception $e){
+            return $e->getMessage() ." : ".$e->getCode();
+        }
+     }
+
+     public static function updateById($values,$id)
+     {
+        try{
+            
+            $table = self::table();
+            $sql = "UPDATE {$table} SET {$values} WHERE id = {$id}";
+            $result = self::$conn->query($sql) or die (self::$conn->error . __LINE__);
+            if(self::$conn->affected_rows > 0){
+                return $result;
+            }else{
+                return false;
             }
 
 
