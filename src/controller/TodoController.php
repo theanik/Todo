@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Controller;
+
 use App\Model\Todo;
 
 require_once realpath("vendor/autoload.php");
@@ -24,13 +26,22 @@ class TodoController extends Todo{
         return json_encode($todos);
     }
 
-    public function addTodo($data = '')
+    public function addTodo(array $data=[])
     {
         $todo = Todo::add("task_name = '{$data['task_name']}',task_status = 1");
         if($todo == true){
             return json_encode($todo);
         }       
     }
+
+    public function updateTodo(array $data=[],$id)
+    {
+        $todo = Todo::updateById("task_name = '{$data['task_name']}'",$id);
+        if($todo == true){
+            return json_encode($todo);
+        }       
+    }
+
 
     public function complete($id)
     {
