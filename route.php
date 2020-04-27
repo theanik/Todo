@@ -16,10 +16,12 @@ $todoController = new TodoController;
 
 $url = $_REQUEST['url'] ?? "";
 
+// echo $url;
 if($url !== ""){
     switch ($url) {
+        
         case "all_todo":
-            $todoController->allTodo();
+            echo $todoController->allTodo();
             break;
         case "active_todo":
             $todoController->activeTodo();
@@ -30,7 +32,13 @@ if($url !== ""){
         case "add_todo":
             $todoController->addTodo($_POST);
             break;
+        case "delete_todo":
+            echo $todoController->deleteTodo($_GET['task_id']);
+            break;
         
 
     }
 }
+
+
+

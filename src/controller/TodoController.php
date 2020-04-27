@@ -51,6 +51,14 @@ class TodoController extends Todo{
         }
     }
 
+    public function deleteTodo($id)
+    {
+        return $delete = Todo::delete("id = {$id}");
+        if($delete == true){
+            return json_encode($delete);
+        }
+        
+    }
     public function deletedCompleted()
     {
         return $delete = Todo::delete('task_status = 2');
@@ -66,4 +74,4 @@ class TodoController extends Todo{
 
 }
 
-print_r((new TodoController)->addTodo());
+// print_r((new TodoController)->allTodo());
