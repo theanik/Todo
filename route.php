@@ -24,16 +24,25 @@ if($url !== ""){
             echo $todoController->allTodo();
             break;
         case "active_todo":
-            $todoController->activeTodo();
+            echo $todoController->activeTodo();
             break;
         case "completed_todo":
-            $todoController->completedTodo();
+           echo $todoController->completedTodo();
             break;
         case "add_todo":
             $todoController->addTodo($_POST);
             break;
         case "delete_todo":
             echo $todoController->deleteTodo($_GET['task_id']);
+            break;
+        case "complete_todo":
+            echo $todoController->complete($_GET['task_id']);
+            break;
+        case "delete_completed": 
+            echo $todoController->deletedCompleted();
+            break;
+        case "update_todo":
+            print_r($todoController->updateTodo($_POST));
             break;
         
 

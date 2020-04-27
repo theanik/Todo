@@ -21,13 +21,20 @@
         To-Do List<span id="toggleForm"><i class="fas fa-plus"></i></span>
       </h1>
       <div class="inputBox">
-        <form action="" method="POST">
-          <input type="text" name="newInput" maxlength="32" placeholder="Add new task..." />
-          <button class="enterBtn" id="enter">ADD</button>
+        <form action="" method="POST" id="newTask">
+          <div class="row mt-3">
+            <div class="col-md-10">
+                <input type="text" name="task_name" class="form-control" width="90%" placeholder="Add new task..." />
+            </div>
+            <div class="col-md-2">
+                 <button class="btn btn-success form-control" >ADD</button>
+            </div>
+          </div>
+          
         </form>
         
       </div>
-      <ul id="list">
+      <ul id="list" class="mt-5">
         <!-- <li>
         <span><i class="fas fa-trash"> </i></span> <input type="checkbox" name="todo_select"> Feed 1
         </li> -->
@@ -41,10 +48,10 @@
         </div>
         <br>
         <div class="row d-flex justify-content-center">
-            <button class="btn btn-info" >All</button>
-              <button  class="btn btn-warning" >Active</button>
-              <button class="btn btn-success" >Completed</button>
-              <button class="btn btn-danger">Clear Completed</button>
+            <button id="all" class="btn btn-info" >All</button>
+              <button id="active"  class="btn btn-warning" >Active</button>
+              <button id="completed" class="btn btn-success" >Completed</button>
+              <button id="clearCompleted" class="btn btn-danger">Clear Completed</button>
             </div>
       </div>
     </div>
@@ -60,54 +67,121 @@
 <script>
 
 $(document).ready(function(){
-    getData();
+    allTodo();
+    
 
     //delete single todo
-    $("#list").on("click","li button",function(){
+    $("#list").on("click","li #btn",function(){
       let id = $(this).data('id');
       deleteOne(id);
     });
+
+    // select as complete
+    $("#list").on("click", "li input[type='checkbox']", function(){
+      let id = $(this).data('id');
+      console.log(id);
+      completeSelect(id)
+    });
+
+    // get all todo
+    $("#all").on("click", function(e){
+      allTodo();
+    })
+
+    // get actice todo
+    $("#active").on("click", function(e){
+      activeTodo();
+    })
+
+    //get completed todo
+
+    $("#completed").on("click", function(){
+      completedTodo();
+    })
+
+
+    // add new
+
+    $("#newTask").on("submit", function(e){
+      e.preventDefault()
+      addTodo();
+
+    })
+
+    $("#clearCompleted").click(function(){
+      clearCompleted();
+    })
+
+    $("#list").on("dblclick", "li span", function(){
+     
+      // $('#hide').attr("type",'text')
+      $(this).find("#hide").attr("type","text")
+      $(this).find("#hide").val($(this).text())
+      $(this).find("span").text("")
+    });
+
+    
+    $("#list").on("submit","#innerForm", function(e){
+      e.preventDefault()
+      $.ajax({
+        type : "POST",
+        url : "../route.php?url=update_todo",
+        data : {
+          task_name : $(this).find("#hide").val(),
+          id : $(this).find("#hide").data('id')
+        },
+        success : function(res){
+          // $('#newTask input[name="task_name"]').val('')
+          console.log(res)
+          allTodo()
+        },
+        error : function(e){
+          console.log(e)
+        }
+      })
+    })
 
 
   })
 
 
-$("#list").on("click", "li", function(){
-  $(this).addClass("complete");
-  $(this).find("input").prop("checked",true)
+// html show
 
-  let id = $(this).data('id');
-  // alert(id)
-
-});
-
-
-// all todo
-function getData(){
-  $.ajax({
-    type : "GET",
-    url : "../route.php?url=all_todo",
-    success : function(res){
-
+function htmlShowList(res){
       let html = ''
       let data = JSON.parse(res);
       let ck = ''
       let complete = ''
-      data.forEach(function(element){
-        
-        if(element.task_status == 2){
-          ck = "checked"
-          complete = "complete"
-        }
-        html += '<li data-id="'+element.id+'" class="'+complete+'">';
-        html += '<input type="checkbox" '+ck+'><span id="txt">'+ element.task_name +'</span><button class="btn btn-sm" id="btn" data-id='+element.id+'><i class="fa fa-trash"></i></button>'
-        // html += ''
-        html += '</li>';
-        ck = ''
-        complete = ''
-      });
+      if(null === data){
+          html += '<div class="alert alert-warning">No Item Found</div>'
+      }else{
+        data.forEach(function(element){
+          // check is complete ?
+          if(element.task_status == 2){
+            ck = "checked"
+            complete = "complete"
+          }
+
+          html += '<form id="innerForm" action="" method="POST"><li class="'+complete+'">';
+          html += '<input type="checkbox" '+ck+' data-id="'+element.id+'"><span><span>'+ element.task_name +'</span><input id="hide" name="task_name" value="'+element.task_name+'" data-id="'+element.id+'" data-name="'+element.task_name+'" type="hidden" ></span><span class="btn btn-sm" id="btn" data-id='+element.id+'><i class="fa fa-trash"></i></span>'
+          // html += ''
+          html += '</li></form>';
+          ck = ''
+          complete = ''
+        });
+      }
 
       $('#list').html(html)
+}
+
+
+// all todo
+function allTodo(){
+  $.ajax({
+    type : "GET",
+    url : "../route.php?url=all_todo",
+    success : function(res){
+      htmlShowList(res)
     },
 
     error : function(e){
@@ -123,7 +197,72 @@ function deleteOne(id){
     url : "../route.php?url=delete_todo&task_id="+id,
     success : function(res){
       console.log(res);
-      getData()
+      allTodo()
+    }
+  })
+}
+
+
+function completeSelect(id){
+  $.ajax({
+    type : "PUT",
+    url : "../route.php?url=complete_todo&task_id="+id,
+    success : function(res){
+      console.log(res);
+      allTodo()
+    }
+  })
+}
+
+
+function activeTodo(){
+  $.ajax({
+    type : "GET",
+    url : "../route.php?url=active_todo",
+    success : function(res){
+      htmlShowList(res)
+    }
+  })
+}
+
+
+function completedTodo(){
+  $.ajax({
+    type : "GET",
+    url : "../route.php?url=completed_todo",
+    success : function(res){
+      htmlShowList(res)
+    }
+  })
+}
+
+
+function addTodo(){
+  $.ajax({
+        type : "POST",
+        url : "../route.php?url=add_todo",
+        data : {
+          task_name : $('#newTask input[name="task_name"]').val()
+        },
+        success : function(res){
+          $('#newTask input[name="task_name"]').val('')
+          console.log(res)
+          allTodo()
+        },
+        error : function(e){
+          console.log(e)
+        }
+      })
+}
+
+
+function clearCompleted(){
+  $.ajax({
+    type : "DELETE",
+    url : "../route.php?url=delete_completed",
+    success : function(res){
+      console.log(res)
+      allTodo();
     }
   })
 }
@@ -132,46 +271,6 @@ function deleteOne(id){
 
 
 
-
-
-
-// //Click on trashcan span to delete Todo 
-// //Select parent(li)to remove the whole list; Noticed First(this) = span ; the second (this) = li
-// //Use stopPropagation to avoid event bubbling 
-// $("ul").on("click", "span", function(event){
-// 	$(this).parent().fadeOut("400",function(){
-// 		$(this).remove();
-// 	});
-// 	event.stopPropagation();
-// });
-
-// //Press enter key to add new list
-// //which = the key code of keypress
-// $("input[type='text']").keypress(function(event){
-// 	if( event.which === 13 && $("input[type='text']").val().length>0){
-// 		var todoText = $(this).val();
-// 		$(this).val("");
-// 		//creat a new li and add to ul; use method "append" to add html content
-// 		$("ul").append("<li><span><i class='fas fa-trash'></i></span> " + todoText + "</li>");
-// 	}
-// });
-
-// //Press enterBtn  to add new list
-// $("button").click(function(){
-// 	if($("input[type='text']").val().length>0){
-// 		var todoText = $("input[type='text']").val();
-// 		$("input[type='text']").val("");
-// 		$("ul").append("<li><span><i class='fas fa-trash'></i></span> " + todoText + "</li>");		
-// 	}
-// })
-
-
-// //toggle plus logo and textInput after click plus
-// $("#toggleForm").click(function(){
-// 	$(this).toggleClass("fa-plus-rotate");
-// 	$("#enter").fadeToggle();
-// 	$("input[type='text']").fadeToggle();
-// });
 
 
 

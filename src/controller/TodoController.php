@@ -34,9 +34,10 @@ class TodoController extends Todo{
         }       
     }
 
-    public function updateTodo(array $data=[],$id)
+    public function updateTodo(array $data=[])
     {
-        $todo = Todo::updateById("task_name = '{$data['task_name']}'",$id);
+        // return $data;
+        $todo = Todo::updateById("task_name = '{$data['task_name']}'",$data['id']);
         if($todo == true){
             return json_encode($todo);
         }       

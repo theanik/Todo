@@ -41,32 +41,13 @@ input[type=text]{
 	background-color: #f7f7f7;
 	color: darkgreen;
 	max-width: 100%;
-	padding: 13px 13px 13px 20px;
 	box-sizing: border-box; 
 	border: 2px solid  #89d1e7e7;
-	flex-grow: 5;
 }
 
-input[type=text]:focus{
-	background: #fff;
-	border: 2px solid  #89d1e7e7;
-	outline: none;
-	text-decoration: underline;
-}
 
-.enterBtn {
-  flex-grow: 1;
-  min-width: 15px;
-  padding: 2px;
-  margin: 0 auto;
-  background-color: #89d1e7e7;
-  border-width: 0;
-  font-size: 18px;
-}
 
-.enterBtn:focus {
- outline: none;
-}
+
 
 ul{
 	list-style: none;
@@ -127,6 +108,13 @@ li:hover span{
 #footer{
 	margin-top: 20px;
 }
-button{
+#btn{
 	float: right;
 }
+
+input[type=checkbox]{
+	margin: 2%;
+	cursor: pointer;
+	padding: 2%;
+
+  }
