@@ -70,9 +70,19 @@ class TodoController extends Todo{
     }
 
 
+    public function countActiceTodo()
+    {
+        $count = Todo::count('task_status = 1');
+        if($count == true){
+            return json_encode($count);
+        }
+        
+    }
+
+
 
 
 
 }
 
-// print_r((new TodoController)->allTodo());
+// print_r((new TodoController)->countActiceTodo());

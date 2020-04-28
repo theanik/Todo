@@ -230,6 +230,23 @@ class Database{
         }
      }
 
+     public static function count($condition)
+     {
+         try{
+            $table = self::table();
+            $sql = "SELECT COUNT(id) FROM todo WHERE {$condition}";
+            $result = self::$conn->query($sql) or die (self::$conn->error . __LINE__);
+            if($result){
+                $row =  $result->fetch_row();
+                return $row[0];
+            }else{
+                return false;
+            }
+         }catch(Exception $e){
+            return $e->getMessage() ." : ".$e->getCode();
+         }
+     }
+
 
 
 

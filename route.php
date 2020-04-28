@@ -42,7 +42,10 @@ if($url !== ""){
             echo $todoController->deletedCompleted();
             break;
         case "update_todo":
-            print_r($todoController->updateTodo($_POST));
+            print($todoController->updateTodo($_POST));
+            break;
+        case "count_todo": 
+            echo $todoController->countActiceTodo();
             break;
         
 

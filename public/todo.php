@@ -35,15 +35,13 @@
         
       </div>
       <ul id="list" class="mt-5">
-        <!-- <li>
-        <span><i class="fas fa-trash"> </i></span> <input type="checkbox" name="todo_select"> Feed 1
-        </li> -->
+        <!-- list will render here -->
         
         
       </ul>
       <div class="container" id="footer">
         <div class="row d-flex justify-content-center">
-              <span class=""> items Left</span>
+              <span class=""><span id="counter"></span> items Left</span>
               
         </div>
         <br>
@@ -52,7 +50,10 @@
               <button id="active"  class="btn btn-warning" >Active</button>
               <button id="completed" class="btn btn-success" >Completed</button>
               <button id="clearCompleted" class="btn btn-danger">Clear Completed</button>
-            </div>
+          </div>
+          <div class="row justify-content-center py-2">
+            <span>Note : Double click on text for edit</span>
+          </div>
       </div>
     </div>
     
@@ -68,7 +69,7 @@
 
 $(document).ready(function(){
     allTodo();
-    
+    countLeftItem();
 
     //delete single todo
     $("#list").on("click","li #btn",function(){
@@ -148,6 +149,7 @@ $(document).ready(function(){
 // html show
 
 function htmlShowList(res){
+      countLeftItem()
       let html = ''
       let data = JSON.parse(res);
       let ck = ''
@@ -268,7 +270,12 @@ function clearCompleted(){
 }
 
 
-
+function countLeftItem(){
+  $.get("../route.php?url=count_todo", function(res){
+    let count = JSON.parse(res)
+    $("#counter").text(count);
+  })
+}
 
 
 
