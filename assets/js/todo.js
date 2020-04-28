@@ -203,7 +203,11 @@ function clearCompleted(){
 
 function countLeftItem(){
   $.get("route.php?url=count_todo", function(res){
-    let count = JSON.parse(res)
+    let count = 0;
+    if(res){
+        count = JSON.parse(res)
+    }
+    console.log(count)
     $("#counter").text(count);
   })
 }
