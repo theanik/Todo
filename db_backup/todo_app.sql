@@ -39,11 +39,11 @@ CREATE TABLE `todo` (
 --
 
 INSERT INTO `todo` (`id`, `task_name`, `task_status`) VALUES
-(64, 'Learn PHP', 2),
-(65, 'Learn OOP', 2),
-(66, 'Learn Principle', 1),
-(67, 'Apply SOLID', 1),
-(68, 'Build something', 1);
+(1, 'Learn PHP', 2),
+(2, 'Learn OOP', 2),
+(3, 'Learn Principle', 1),
+(4, 'Apply SOLID', 1),
+(5, 'Build something', 1);
 
 --
 -- Indexes for dumped tables
